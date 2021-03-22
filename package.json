@@ -1,0 +1,37 @@
+{
+  "name": "react-css-module-plugin",
+  "version": "1.0.0",
+  "description": "none",
+  "repository": "https://github.com/mayu888/react-css-module-plugin.git",
+  "author": "mayu827@163.com",
+  "main": "./lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "flow": "flow",
+    "build": "rollup -c rollup.config.js"
+  },
+  "files": [
+    "lib",
+    "README.MD",
+    "LICENSE.MD"
+  ],
+  "dependencies": {
+    "@babel/parser": "^7.13.10",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
+    "@babel/plugin-transform-classes": "^7.13.0",
+    "babel-traverse": "^6.26.0",
+    "babel-types": "^6.26.0",
+    "chalk": "^4.1.0",
+    "css-tree": "^1.1.2",
+    "md5": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@rollup/plugin-json": "^4.1.0",
+    "rollup": "^2.41.4",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
