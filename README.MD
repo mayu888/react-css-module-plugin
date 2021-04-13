@@ -21,6 +21,7 @@ module.exports = {
     ]
 }
 ```
+
 ## Props
 * preStyle: .less、.scss、.sass or .css.**necessary**,Represents which style file you will deal with
 * preFile: ["js","jsx","ts","tsx"],Some or all of them,**necessary**,Represents what kind of react file to process.
