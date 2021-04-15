@@ -20,6 +20,7 @@ module.exports = {
         new ReactCssModulePlugin({ preStyle:'.less', preFile:["js","jsx"] })
     ]
 }
+
 ```
 ## Props
 * preStyle: .less、.scss、.sass or .css.**necessary**,Represents which style file you will deal with
