@@ -1,11 +1,12 @@
+import { Compiler } from 'webpack';
 const path = require('path');
 const chalk = require('chalk');
 const { preFileTransFormReg, styleType, fileType, preMap } = require('./utils');
 const SCOPE_JSX_CSS_PLUGIN = 'scope-jsx-css-plugin';
 const log = console.log;
 class ScopeJsxCssPlugin{
-
-    constructor(options) {
+    private options: any;
+    constructor(options:any) {
         this.options = options;
         if (!options.preStyle) {
             throw  Error('must have an type,such .less、.scss、.sass or .css')
@@ -27,11 +28,11 @@ class ScopeJsxCssPlugin{
         }
     }
 
-    isReg(r) {
+    isReg(r:any) {
         return r instanceof RegExp;
     }
 
-    apply(compiler) {
+    apply(compiler:Compiler) {
         const self = this;
         const options = this.options;
         if (!styleType.includes(options.preStyle)) {
@@ -46,19 +47,19 @@ class ScopeJsxCssPlugin{
             SCOPE_JSX_CSS_PLUGIN,
             () => {
                 let loaders = compiler.options.module.rules;
-                let preLoader = loaders.find(evl => {
+                let preLoader: any = loaders.find((evl: any) => {
                     return self.isReg(evl.test) && evl.test.test(pre);
                 });
                 if (!preLoader) {
-                    const oneOf = compiler.options.module.rules.find(evl => evl.oneOf && Array.isArray(evl.oneOf));
+                    const oneOf: any = compiler.options.module.rules.find((evl: any) => evl.oneOf && Array.isArray(evl.oneOf));
                     loaders = oneOf && oneOf.oneOf;
                     if (Array.isArray(loaders)) {
-                        preLoader = loaders.find(item => item.test && self.isReg(item.test) && item.test.test(pre));
+                        preLoader = loaders.find((item: any) => item.test && self.isReg(item.test) && item.test.test(pre));
                     }
                 };
                 const l = preMap[pre];
                 if (preLoader && Array.isArray(preLoader.use)) {
-                    const index = preLoader.use.findIndex(item => {
+                    const index = preLoader.use.findIndex((item: any) => {
                         if (typeof (item) === 'object') {
                             return item.loader.includes(l);
                         }

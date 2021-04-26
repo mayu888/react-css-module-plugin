@@ -1,11 +1,11 @@
 import path from 'path';
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs';
-
-const resolveFile = function(filePath) {
+const rollupTypescript = require('@rollup/plugin-typescript');
+const resolveFile = function (filePath) {
     return path.join(__dirname, filePath);
 };
-  
+
 const plugins = [
     commonjs(),
     babel({
@@ -25,30 +25,30 @@ const plugins = [
 
 export default [
     {
-        input: resolveFile('src/index.js'),
+        input: resolveFile('src/index.ts'),
         output: {
             file: resolveFile('lib/index.js'),
             format: 'cjs',
-            exports:'auto',
+            exports: 'auto',
         },
-        plugins
+        plugins: [rollupTypescript(), ...plugins]
     },
     {
         input: resolveFile('src/css-loader.js'),
         output: {
             file: resolveFile('lib/css-loader.js'),
             format: 'cjs',
-            exports:'auto',
+            exports: 'auto',
         },
         plugins
-        
+
     },
     {
         input: resolveFile('src/jsx-loader.js'),
         output: {
             file: resolveFile('lib/jsx-loader.js'),
             format: 'cjs',
-            exports:'auto',
+            exports: 'auto',
         },
         plugins
     },
