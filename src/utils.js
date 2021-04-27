@@ -24,7 +24,7 @@ const preMap = {
 
 const defaultConfig = {
     sourceType: "module",
-    plugins: ["dynamicImport", "jsx","classProperties","typescript"],
+    plugins: ["dynamicImport", "jsx", "classProperties", "typescript"],
 }
 
 

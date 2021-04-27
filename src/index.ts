@@ -1,12 +1,13 @@
-import { Compiler } from 'webpack';
+import { Compiler, RuleSetRule } from 'webpack';
+import { ScopeJsxCssPluginI, Options, PreStyle, JsConfig, PreFile, Cludes } from './typing';
 const path = require('path');
 const chalk = require('chalk');
 const { preFileTransFormReg, styleType, fileType, preMap } = require('./utils');
 const SCOPE_JSX_CSS_PLUGIN = 'scope-jsx-css-plugin';
 const log = console.log;
-class ScopeJsxCssPlugin{
-    private options: any;
-    constructor(options:any) {
+class ScopeJsxCssPlugin implements ScopeJsxCssPluginI{
+    private options: Options;
+    constructor(options: Options) {
         this.options = options;
         if (!options.preStyle) {
             throw  Error('must have an type,such .less、.scss、.sass or .css')
@@ -28,17 +29,17 @@ class ScopeJsxCssPlugin{
         }
     }
 
-    isReg(r:any) {
+    isReg(r:any): boolean {
         return r instanceof RegExp;
     }
 
-    apply(compiler:Compiler) {
+    apply(compiler: Compiler): void {
         const self = this;
-        const options = this.options;
+        const options: Options = this.options;
         if (!styleType.includes(options.preStyle)) {
             throw Error('the preStyle must one of [".less", ".scss", ".sass", ".css"]')
         }
-        const pre = options.preStyle;
+        const pre: PreStyle = options.preStyle;
         const excludes = options.excludes;
         const includes = options.includes;
         const preFile = options.preFile || 'js';
@@ -46,20 +47,20 @@ class ScopeJsxCssPlugin{
         compiler.hooks.afterPlugins.tap(
             SCOPE_JSX_CSS_PLUGIN,
             () => {
-                let loaders = compiler.options.module.rules;
-                let preLoader: any = loaders.find((evl: any) => {
-                    return self.isReg(evl.test) && evl.test.test(pre);
+                let loaders: RuleSetRule[] | any = compiler.options.module.rules;
+                let preLoader: RuleSetRule = loaders.find((evl: RuleSetRule) => {
+                    return evl.test instanceof RegExp && evl.test.test(pre);
                 });
                 if (!preLoader) {
-                    const oneOf: any = compiler.options.module.rules.find((evl: any) => evl.oneOf && Array.isArray(evl.oneOf));
+                    const oneOf: RuleSetRule | any = compiler.options.module.rules.find((evl: any) => evl.oneOf && Array.isArray(evl.oneOf));
                     loaders = oneOf && oneOf.oneOf;
                     if (Array.isArray(loaders)) {
                         preLoader = loaders.find((item: any) => item.test && self.isReg(item.test) && item.test.test(pre));
                     }
                 };
-                const l = preMap[pre];
+                const l: string = preMap[pre];
                 if (preLoader && Array.isArray(preLoader.use)) {
-                    const index = preLoader.use.findIndex((item: any) => {
+                    const index: number = preLoader.use.findIndex((item: any) => {
                         if (typeof (item) === 'object') {
                             return item.loader.includes(l);
                         }
@@ -73,8 +74,8 @@ class ScopeJsxCssPlugin{
                         preLoader.use = copyUse;
                     }
                 }
-                const test = preFileTransFormReg(preFile)
-                const jsConfig = {
+                const test: RegExp = preFileTransFormReg(preFile)
+                const jsConfig: JsConfig = {
                     test,
                     exclude: /node_modules/,
                     loader: path.join(__dirname, 'jsx-loader'),
