@@ -1,5 +1,5 @@
 import { Options } from './@types';
-const traverse = require("babel-traverse");
+const traverse = require("babel-traverse").default;
 const md5 = require('md5');
 const babel = require("@babel/core");
 const path = require('path');
