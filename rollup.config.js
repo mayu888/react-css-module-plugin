@@ -7,6 +7,7 @@ const resolveFile = function (filePath) {
 };
 
 const plugins = [
+    rollupTypescript(),
     commonjs(),
     babel({
         exclude: 'node_modules/**',
@@ -31,25 +32,25 @@ export default [
             format: 'cjs',
             exports: 'auto',
         },
-        plugins: [rollupTypescript(), ...plugins]
+        plugins,
     },
     {
-        input: resolveFile('src/css-loader.js'),
+        input: resolveFile('src/css-loader.ts'),
         output: {
             file: resolveFile('lib/css-loader.js'),
             format: 'cjs',
             exports: 'auto',
         },
-        plugins
+        plugins,
 
     },
     {
-        input: resolveFile('src/jsx-loader.js'),
+        input: resolveFile('src/jsx-loader.ts'),
         output: {
             file: resolveFile('lib/jsx-loader.js'),
             format: 'cjs',
             exports: 'auto',
         },
-        plugins
+        plugins,
     },
 ]

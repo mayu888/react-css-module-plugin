@@ -1,3 +1,4 @@
+import { Options } from './@types';
 const traverse = require("babel-traverse");
 const md5 = require('md5');
 const babel = require("@babel/core");
@@ -7,46 +8,47 @@ const parser = require("@babel/parser");
 const loaderUtils = require('loader-utils');
 const { styleType, defaultConfig } = require('./utils');
 
-let _cache = {};
+let _cache: any = {};
 const fileEnd = styleType;
 
-function createHash(dep) {
+function createHash(dep: string): string {
     if (_cache[dep]) return _cache[dep];
-    const hash = md5(dep).substr(0, 6);
+    const hash: string = md5(dep).substr(0, 6);
     _cache[dep] = hash;
     return hash;
 };
 
-function isSubPath(excludes,context) {
+function isSubPath(excludes: string | string[],context: string): boolean {
     if (typeof (excludes) === 'string') {
         return context.includes(excludes);
     }
     if (Array.isArray(excludes)) {
-        return excludes.find(p => context.includes(p));
+        return !!(excludes.find(p => context.includes(p)));
     }
+    return false;
 }
 
-module.exports = function (source) {
-    const self = this;
-    const thisOptions = loaderUtils.getOptions(this);
-    const resourcePath = self.resourcePath;
+module.exports = function<T>(source: T): T {
+    const self: any = this;
+    const thisOptions: Options = loaderUtils.getOptions(this);
+    const resourcePath: string = self.resourcePath;
     if (thisOptions.includes) {
-        const y = isSubPath(thisOptions.includes, resourcePath);
+        const y: boolean = isSubPath(thisOptions.includes, resourcePath);
         if (!y) return source;
     }
     if (thisOptions.excludes) {
-        const y = isSubPath(thisOptions.excludes, resourcePath);
+        const y: boolean = isSubPath(thisOptions.excludes, resourcePath);
         if (y) return source;
     }
-    const ast = parser.parse(source, defaultConfig);
-    let canTraverse = false;
+    const ast: import("@babel/types").File = parser.parse(source, defaultConfig);
+    let canTraverse: boolean = false;
     traverse(ast, {
-        ImportDeclaration: function (p) {
+        ImportDeclaration: function (p: any) {
             const source = p.node.source;
             if (!t.isStringLiteral(source)) {
                 return p.skip();
             }
-            const extname = path.extname(source.value);
+            const extname: string = path.extname(source.value);
             if (styleType.includes(extname)) {
                 canTraverse = true;
             }
@@ -54,14 +56,14 @@ module.exports = function (source) {
     });
     if (!canTraverse) return source;
     _cache = {};
-    const classHashChange = {};
+    const classHashChange: any = {};
     const options = {
-        JSXAttribute: function(path) {
+        JSXAttribute: function(path: any) {
             const { name, value } = path.node;
             if (name.name !== 'className') return;
             if (!t.isStringLiteral(value)) return;
-            const classNames = value.value;
-            const newClassNames = new Set();
+            const classNames: string = value.value;
+            const newClassNames: Set<string> = new Set();
             classNames.split(" ").map(c => {
                 if (c.includes('global-')) {
                     newClassNames.add(c)
@@ -80,7 +82,7 @@ module.exports = function (source) {
     }
     traverse(ast, options);
     traverse(ast, {
-        StringLiteral: function StringLiteral(p) {
+        StringLiteral: function StringLiteral(p: any) {
             const { value } = p.node;
             if (!fileEnd.includes(path.extname(value))) return p.skip();
             p.node.value = `${value}?${JSON.stringify(classHashChange)}`;

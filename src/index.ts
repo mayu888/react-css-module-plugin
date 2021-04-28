@@ -1,5 +1,5 @@
 import { Compiler, RuleSetRule } from 'webpack';
-import { ScopeJsxCssPluginI, Options, PreStyle, JsConfig, PreFile, Cludes } from './typing';
+import { ScopeJsxCssPluginI, Options, PreStyle, JsConfig } from './@types';
 const path = require('path');
 const chalk = require('chalk');
 const { preFileTransFormReg, styleType, fileType, preMap } = require('./utils');
