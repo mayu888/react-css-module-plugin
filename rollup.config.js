@@ -1,13 +1,13 @@
 import path from 'path';
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs';
-const rollupTypescript = require('@rollup/plugin-typescript');
+import typescript from 'rollup-plugin-typescript2'
 const resolveFile = function (filePath) {
     return path.join(__dirname, filePath);
 };
 
 const plugins = [
-    rollupTypescript(),
+    typescript(),
     commonjs(),
     babel({
         exclude: 'node_modules/**',
@@ -36,6 +36,7 @@ export default [
     },
     {
         input: resolveFile('src/css-loader.ts'),
+        context: '',
         output: {
             file: resolveFile('lib/css-loader.js'),
             format: 'cjs',
