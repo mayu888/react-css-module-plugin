@@ -1,5 +1,6 @@
-
-const preFileTransFormReg = (preFile) => {
+import { ParserOptions } from '@babel/parser';
+import { PreStyle, PreFile } from './@types';
+const preFileTransFormReg = (preFile: string | string[]): RegExp => {
     let test;
     if (Array.isArray(preFile)) {
         test = preFile.join('|');
@@ -11,9 +12,9 @@ const preFileTransFormReg = (preFile) => {
     return test;
 }
 
-const styleType = [".less", ".scss", ".sass", ".css"];
+const styleType: PreStyle[] = [".less", ".scss", ".sass", ".css"];
 
-const fileType = ["js", "jsx", "tsx", "ts"];
+const fileType: PreFile[] = ["js", "jsx", "tsx", "ts"];
 
 const preMap = {
     '.less': 'less-loader',
@@ -22,7 +23,7 @@ const preMap = {
     '.css': 'css-loader',
 }
 
-const defaultConfig = {
+const defaultConfig: ParserOptions = {
     sourceType: "module",
     plugins: ["dynamicImport", "jsx", "classProperties", "typescript"],
 }
