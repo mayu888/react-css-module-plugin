@@ -7,7 +7,7 @@ module.exports = function<T> (source:T): T{
     const self:any = this;
     if (!self.resource) return source;
     try {
-        const [_, query] = self.resource.split('?');
+        const query = self.resource.split('?')[1];
         if (!query || !Object.keys(query).length) return source;
         const resourceQuery = JSON.parse(query);
         const ast = crosstree.parse(source);
