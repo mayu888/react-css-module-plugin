@@ -54,4 +54,13 @@ export default [
         },
         plugins,
     },
+    {
+        input: resolveFile('src/utils.ts'),
+        output: {
+            file: resolveFile('lib/utils.js'),
+            format: 'cjs',
+            exports: 'auto',
+        },
+        plugins,
+    },
 ]
