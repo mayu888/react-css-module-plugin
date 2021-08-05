@@ -28,6 +28,15 @@ function isSubPath(excludes: string | string[],context: string): boolean {
     return false;
 }
 
+function selectFileName(_path: string): string {
+    if (typeof (_path) !== 'string') throw ('the path is not string');
+    let { name, dir } = path.parse(_path);
+    if (name === 'index') {
+        name = dir.split(path.sep)[dir.split(path.sep).length - 1];
+    }
+    return name;
+}
+
 module.exports = function<T>(source: T): T {
     const self: any = this;
     const thisOptions: Options = loaderUtils.getOptions(this);
@@ -55,6 +64,7 @@ module.exports = function<T>(source: T): T {
         }
     });
     if (!canTraverse) return source;
+    const preName = selectFileName(resourcePath);
     _cache = {};
     const classHashChange: any = {};
     const options = {
@@ -70,7 +80,7 @@ module.exports = function<T>(source: T): T {
                     return;
                 } 
                 const deps = resourcePath + c;
-                const hash = createHash(deps);
+                const hash = `${createHash(deps)}_${preName}`;
                 const newC = `${c}_${hash}`;
                 classHashChange[c] = hash;
                 newClassNames.add(newC);
