@@ -11,11 +11,15 @@ module.exports = function<T> (source:T): T{
         if (!query || !Object.keys(query).length) return source;
         const resourceQuery = JSON.parse(query);
         const ast = crosstree.parse(source);
-        crosstree.walk(ast, (node:any) => {
-            if (node.type === 'ClassSelector') {
+        crosstree.walk(ast, {
+            visit: 'ClassSelector',
+            enter(node: any) {
                 if (resourceQuery[node.name]) {
-                    node.name = `${node.name}_${resourceQuery[node.name]}`
+                    node._postfix = `_${resourceQuery[node.name]}`;
                 }
+            },
+            leave(node: any) {
+                node.name = node._postfix ? node.name + node._postfix : node.name;
             }
         });
         return crosstree.generate(ast);
