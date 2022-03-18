@@ -15,11 +15,11 @@ module.exports = function<T> (source:T): T{
             visit: 'ClassSelector',
             enter(node: any) {
                 if (resourceQuery[node.name]) {
-                    node._postfix = `_${resourceQuery[node.name]}`;
+                    node._postfix = `${resourceQuery[node.name]}`;
                 }
             },
             leave(node: any) {
-                node.name = node._postfix ? node.name + node._postfix : node.name;
+                node.name = node._postfix ? node._postfix : node.name;
             }
         });
         return crosstree.generate(ast);

@@ -74,16 +74,14 @@ module.exports = function<T>(source: T): T {
             if (!t.isStringLiteral(value)) return;
             const classNames: string = value.value;
             const newClassNames: Set<string> = new Set();
-            classNames.split(" ").map(c => {
-                if (c.includes('global-')) {
-                    newClassNames.add(c)
+            classNames.split(" ").map(className => {
+                if (className.includes('global-')) {
+                    newClassNames.add(className)
                     return;
                 } 
-                const deps = resourcePath + c;
-                const hash = `${createHash(deps)}_${preName}`;
-                const newC = `${c}_${hash}`;
-                classHashChange[c] = hash;
-                newClassNames.add(newC);
+                const newClassName = `${preName}_${className}_${createHash(resourcePath + className)}`;
+                classHashChange[className] = newClassName;
+                newClassNames.add(newClassName);
             })
             value.value = [...newClassNames].join(" ");
             return path.skip()
